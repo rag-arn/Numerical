@@ -113,6 +113,59 @@ void poly (vector<double> x, vector<double> y) {
 
 }
 
+void poly_n (vector<double> x, vector<double> y) {
+    int deg;
+    cout << "Enter degree : ";
+    cin >> deg;
+
+    vector<vector<double>> arr(deg+1, vector<double> (deg+2));
+
+    vector<double> xi(2*deg, 0.0), yi(deg+1, 0.0);
+
+    for (int i=0; i<2*deg; i++) {
+        for (int j=0; j<n; j++) {
+            xi[i] += pow(x[j], i+1);
+        }
+    }
+    
+    for (int i=0; i<deg+1; i++) {
+        for (int j=0; j<n; j++) {
+            yi[i] += pow(x[j], i)*y[j];
+        }
+    }
+
+    arr[0][0] = n;
+    for (int j=1; j<=deg; j++) {
+        arr[0][j] = xi[j-1];
+    }
+    for (int i=1; i<=deg; i++) {
+        for (int j=0; j<=deg; j++) {
+            arr[i][j] = xi[i+j-1];
+         }
+    }
+
+    for (int i=0; i<deg+1; i++) {
+        arr[i][deg+1] = yi[i];
+    }
+
+    vector<double> ans = gauss_jordan(arr, deg+1);
+
+    if (ans.size()==0){
+        return;
+    }
+
+    cout << "\nEquation : " << endl;
+    cout << fixed << setprecision(4) << "y = ";
+    for (int i=0; i<ans.size(); i++) {
+        if (i > 0) cout << " + ";
+        cout << ans[i];
+        if (i == 1) cout << "x";
+        else if (i > 1) cout << "x^" << i;
+
+    }
+    cout << endl;
+}
+
 void linear(vector<double> x, vector<double> y) {
     double xi=0, yi=0, xi2=0, xiyi=0;
 
@@ -159,6 +212,7 @@ int main() {
     cout << "1. Linear\n";
     cout << "2. Polynomial\n";
     cout << "3. Transcendental\n";
+    cout << "4. Polynomial of useer input degree\n";
 
     cout << "Enter choice : ";
     cin >> choice;
@@ -171,6 +225,9 @@ int main() {
         break;
 
         case 3 : td (x, y);
+        break;
+
+        case 4 : poly_n(x, y);
         break;
     }
 }
