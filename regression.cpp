@@ -87,6 +87,34 @@ void td (vector<double> x, vector<double> y) {
     cout << "y = " << a << "e^(" << b << "x)" << endl;
 }
 
+void td2 (vector<double> x, vector<double> y) {
+    double Xi=0, Yi=0, XiYi=0, Xi2 = 0;
+
+    for (int i=0; i<n; i++) {
+        Xi += log(x[i]);
+        Yi += log(y[i]);
+        XiYi += log(x[i])*(log(y[i]));
+        Xi2 += log(x[i])*log(x[i]);
+    }
+
+    vector<vector<double>> arr(2, vector<double> (3));
+
+    arr[0][0] = n;
+    arr[0][1] = Xi;
+    arr[0][2] = Yi;
+    
+    arr[1][0] = Xi;
+    arr[1][1] = Xi2;
+    arr[1][2] = XiYi;
+
+    vector<double> ans = gauss_jordan(arr, 2);
+
+    double a = exp(ans[0]), b = ans[1];
+
+    cout << "Equation : " << endl;
+    cout << "y = " << a << "x^(" << b << ")" << endl;
+}
+
 void poly (vector<double> x, vector<double> y) {
     double xi=0, yi=0, xiyi=0, xi2=0, xi3=0, xi4=0, xi2yi=0;
 
@@ -211,8 +239,9 @@ int main() {
     int choice;
     cout << "1. Linear\n";
     cout << "2. Polynomial\n";
-    cout << "3. Transcendental\n";
-    cout << "4. Polynomial of useer input degree\n";
+    cout << "3. Transcendental (y=ae^x)\n";
+    cout << "4. Transcendental (y=ax^b)\n";
+    cout << "5. Polynomial of useer input degree\n";
 
     cout << "Enter choice : ";
     cin >> choice;
@@ -227,7 +256,10 @@ int main() {
         case 3 : td (x, y);
         break;
 
-        case 4 : poly_n(x, y);
+        case 4 : td2(x, y);
+        break;
+
+        case 5 : poly_n(x, y);
         break;
     }
 }
